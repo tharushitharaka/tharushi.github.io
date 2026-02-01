@@ -2,65 +2,448 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tharushi | Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tharushi Warakagoda | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A; /* Deep Dark Blue/Slate */
+            color: #F1F5F9; /* Light text */
+            position: relative; /* For star container positioning */
+            min-height: 100vh;
+        }
+
+        /* STARFIELD ANIMATION SETUP */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place behind all content */
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        /* Keyframes for star movement (subtle parallax/twinkle) */
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        /* Base star layer - small, dense stars */
+        .stars1 {
+            background: transparent url('data:image/png;base64,iVBORw0KGgoAAAANNSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
+            box-shadow: 
+                0 0 1px 1px #AABBE0, 80px 80px 1px #AABBE0, 250px 150px 1px #AABBE0, 400px 300px 1px #AABBE0, 150px 450px 1px #AABBE0,
+                550px 50px 1px #AABBE0, 700px 250px 1px #AABBE0, 850px 450px 1px #AABBE0, -100px 100px 1px #AABBE0, 300px -200px 1px #AABBE0;
+            animation: twinkle 8s linear infinite alternate;
+            width: 2px;
+            height: 2px;
+            position: absolute;
+            top: 0; left: 0;
+            transform: scale(0.8);
+            opacity: 0.7;
+        }
+
+        /* Foreground gradient overlay for depth and focus */
+        .universe-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(at 0% 0%, #1e40af20, transparent 70%), radial-gradient(at 100% 100%, #2563eb20, transparent 70%);
+            z-index: -1;
+        }
+
+        /* Medium star layer - slightly larger, slower movement */
+        .stars2 {
+            background: transparent url('data:image/png;base64,iVBORw0KGgoAAAANNSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
+            box-shadow: 
+                0 0 1px 1px #FFF, 100px 100px 1px #FFF, 200px 50px 1px #FFF, 300px 200px 1px #FFF, 50px 350px 1px #FFF,
+                450px 150px 1px #FFF, 550px 300px 1px #FFF, 650px 50px 1px #FFF, 750px 400px 1px #FFF, 850px 180px 1px #FFF,
+                -50px 250px 1px #FFF, -150px 400px 1px #FFF, 150px -50px 1px #FFF, 350px -150px 1px #FFF;
+            animation: twinkle 5s linear infinite alternate;
+            width: 1px;
+            height: 1px;
+            position: absolute;
+            top: 0; left: 0;
+            /* Using repeated box-shadows to simulate thousands of stars without generating massive data URI */
+            transform: scale(0.6);
+            opacity: 0.5;
+        }
+
+        /* Dark Glassmorphism Card Style */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.9); /* Slate 800 slightly less transparent for contrast */
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.8); 
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.4), 0 6px 10px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #2563eb; /* Blue 600 */
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .project-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        
+        /* Skills Card specific style */
+        .skill-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1.5rem;
+            min-height: 120px;
+        }
+        .skill-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Mobile menu */
+        #mobile-menu {
+            display: none;
+        }
+
+        #mobile-menu.show {
+            display: block;
+        }
+    </style>
 </head>
-<body>
 
-<header>
-    <h1>Tharushi Warakagoda</h1>
-    <p>Information Systems Engineering Undergraduate | SLIIT</p>
-</header>
+<body class="flex flex-col min-h-screen">
 
-<section id="about">
-    <h2>About Me</h2>
-    <p>
-        I am an undergraduate student at SLIIT following a degree in
-        Information Systems Engineering. I am interested in software
-        development and web technologies.
-    </p>
-</section>
-
-<section id="skills">
-    <h2>Skills</h2>
-    <ul>
-        <li>C, C++</li>
-        <li>Java</li>
-        <li>HTML, CSS, JavaScript</li>
-        <li>React, Node.js</li>
-        <li>MongoDB</li>
-        <li>Git & GitHub</li>
-    </ul>
-</section>
-
-<section id="projects">
-    <h2>Projects</h2>
-
-    <div class="project">
-        <h3>Student Accommodation System</h3>
-        <p>
-            Full-stack web application using React, Node.js, Express, MongoDB
-            with Stripe payment integration.
-        </p>
-        <a href="https://github.com/yourgithub">View on GitHub</a>
+    <!-- Universe Background Container -->
+    <div class="starfield">
+        <div class="stars1"></div>
+        <div class="stars2"></div>
+        <div class="universe-overlay"></div>
     </div>
-</section>
 
-<section id="education">
-    <h2>Education</h2>
-    <p>BSc (Hons) Information Technology – SLIIT</p>
-</section>
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="font-bold text-xl tracking-tight text-white">Tharushi<span class="text-blue-500">Warakagoda</span></div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#about" class="nav-link text-sm font-medium text-slate-300 hover:text-blue-500">About</a>
+                    <a href="#skills" class="nav-link text-sm font-medium text-slate-300 hover:text-blue-500">Skills</a>
+                    <a href="#projects" class="nav-link text-sm font-medium text-slate-300 hover:text-blue-500">Projects</a>
+                    <a href="#education" class="nav-link text-sm font-medium text-slate-300 hover:text-blue-500">Education</a>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-slate-300 hover:text-white focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="#about" class="block py-2 text-sm font-medium text-slate-300 hover:text-blue-500">About</a>
+                <a href="#skills" class="block py-2 text-sm font-medium text-slate-300 hover:text-blue-500">Skills</a>
+                <a href="#projects" class="block py-2 text-sm font-medium text-slate-300 hover:text-blue-500">Projects</a>
+                <a href="#education" class="block py-2 text-sm font-medium text-slate-300 hover:text-blue-500">Education</a>
+            </div>
+        </div>
+    </nav>
 
-<section id="contact">
-    <h2>Contact</h2>
-    <p>Email: your@email.com</p>
-    <p>LinkedIn: linkedin.com/in/yourname</p>
-    <p>GitHub: github.com/yourusername</p>
-</section>
+    <!-- Hero Section -->
+    <section id="about" class="pt-12 pb-12 sm:pt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass-card rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-10">
+            <div class="flex-1 text-center md:text-left">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-800 text-blue-200 mb-4">
+                    Seeking Software Development Opportunities
+                </span>
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
+                    Information Systems Engineering Undergraduate
+                </h1>
+                <p class="text-lg text-slate-400 mb-8 leading-relaxed max-w-2xl">
+                    I am <strong class="text-blue-400">Tharushi Warakagoda</strong>, a 3rd-year IT undergraduate at SLIIT with a passion for software development and web technologies. I am currently seeking opportunities to apply my skills in real-world projects and contribute to innovative solutions.
+                </p>
+                <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                    <a href="mailto:tharushiwarakagoda2003@gmail.com" class="px-6 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition shadow-lg shadow-blue-500/30">
+                        Contact Me
+                    </a>
+                    <a href="#projects" class="px-6 py-3 rounded-lg bg-slate-700 border border-slate-600 text-slate-200 font-medium hover:bg-slate-600 transition">
+                        View Projects
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Key Metric Cards -->
+            <div class="w-full md:w-80 space-y-4">
+                <div class="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl border border-slate-600 p-5 text-center">
+                    <div class="text-4xl font-extrabold text-white">3+</div>
+                    <div class="text-xs text-slate-200 uppercase font-semibold mt-1">Years of Learning</div>
+                </div>
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-600 rounded-xl border border-slate-600 p-5 text-center">
+                    <div class="text-4xl font-extrabold text-white">2027</div>
+                    <div class="text-xs text-slate-200 uppercase font-semibold mt-1">Expected Graduation</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<footer>
-    <p>© 2026 Tharushi Warakagoda</p>
-</footer>
+    <!-- Skills Section -->
+    <section id="skills" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-white mb-10 text-center">Technical Expertise</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            
+            <!-- HTML -->
+            <div class="glass-card skill-card rounded-xl hover:scale-105 transition-transform">
+                <svg class="skill-icon text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20v18H2zM6 15h12M6 9h12"/></svg>
+                <span class="text-sm font-medium text-white">HTML5</span>
+            </div>
+            
+            <!-- CSS -->
+            <div class="glass-card skill-card rounded-xl hover:scale-105 transition-transform">
+                <svg class="skill-icon text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11h7M5 11h7M5 17h7M12 5h7"/></svg>
+                <span class="text-sm font-medium text-white">CSS3</span>
+            </div>
+            
+            <!-- JavaScript -->
+            <div class="glass-card skill-card rounded-xl hover:scale-105 transition-transform">
+                <svg class="skill-icon text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1h10v22H12zM2 1h10v22H2z"/></svg>
+                <span class="text-sm font-medium text-white">JavaScript</span>
+            </div>
+            
+            <!-- React -->
+            <div class="glass-card skill-card rounded-xl hover:scale-105 transition-transform">
+                <svg class="skill-icon text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="2" x2="12" y2="22"/><path d="M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg>
+                <span class="text-sm font-medium text-white">React.js</span>
+            </div>
+            
+            <!-- Node.js -->
+            <div class="glass-card skill-card rounded-xl hover:scale-105 transition-transform">
+                <svg class="skill-icon text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/><line x1="12" y1="12" x2="12" y2="22"/></svg>
+                <span class="text-sm font-medium text-white">Node.js</span>
+            </div>
+            
+            <!-- MongoDB -->
+            <div class="glass-card skill-card rounded-xl hover:scale-105 transition-transform">
+                <svg class="skill-icon text-green-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/></svg>
+                <span class="text-sm font-medium text-white">MongoDB</span>
+            </div>
+            
+            <!-- C -->
+            <div class="glass-card skill-card rounded-xl hover:scale-105 transition-transform">
+                <svg class="skill-icon text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                <span class="text-sm font-medium text-white">C</span>
+            </div>
+            
+            <!-- C++ -->
+            <div class="glass-card skill-card rounded-xl hover:scale-105 transition-transform">
+                <svg class="skill-icon text-blue-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><path d="M9 15l2-2 2 2"/></svg>
+                <span class="text-sm font-medium text-white">C++</span>
+            </div>
+            
+            <!-- Java -->
+            <div class="glass-card skill-card rounded-xl hover:scale-105 transition-transform">
+                <svg class="skill-icon text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1l3 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"/></svg>
+                <span class="text-sm font-medium text-white">Java</span>
+            </div>
+            
+            <!-- Git -->
+            <div class="glass-card skill-card rounded-xl hover:scale-105 transition-transform">
+                <svg class="skill-icon text-orange-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M1.05 12H7M17.01 12h5.95"/></svg>
+                <span class="text-sm font-medium text-white">Git</span>
+            </div>
+            
+            <!-- GitHub -->
+            <div class="glass-card skill-card rounded-xl hover:scale-105 transition-transform">
+                <svg class="skill-icon text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.372 0 0 5.372 0 12c0 5.303 3.438 9.8 8.205 11.385.6.11.82-.26.82-.57 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.332-1.756-1.332-1.756-1.087-.743.082-.728.082-.728 1.205.084 1.838 1.238 1.838 1.238 1.07 1.835 2.809 1.305 3.495.998.108-.775.419-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.31-.54-1.52.105-3.26 0 0 1.005-.32 3.3 1.23a11.42 11.42 0 0 1 3.005-.405c1.02.005 2.04.135 3.005.405 2.28-1.55 3.285-1.23 3.285-1.23.645 1.74.24 2.95.12 3.26.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.095.81 2.22 0 1.605-.015 2.895-.045 3.285 0 .315.21.69.825.57A12.02 12.02 0 0 0 24 12c0-6.628-5.372-12-12-12z"/></svg>
+                <span class="text-sm font-medium text-white">GitHub</span>
+            </div>
+            
+        </div>
+    </section>
 
+    <!-- Projects Section -->
+    <section id="projects" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+                <h2 class="text-3xl font-bold text-white mb-3">Project Portfolio</h2>
+                <p class="text-slate-400 max-w-xl">
+                    A selection of my projects demonstrating my capabilities in web development and software engineering.
+                </p>
+            </div>
+        </div>
+
+        <!-- Project Grid -->
+        <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Cards will be injected by JS -->
+        </div>
+    </section>
+
+    <!-- Education & Certifications -->
+    <section id="education" class="py-16 bg-slate-900/90 border-t border-slate-700">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-white mb-10 text-center">Education Journey</h2>
+            
+            <div class="relative border-l-4 border-blue-400 ml-6 space-y-12 pb-8">
+                
+                <!-- Education Item 1 -->
+                <div class="relative pl-8 group">
+                    <div class="absolute -left-3 top-2 bg-blue-600 h-6 w-6 rounded-full border-4 border-slate-900 shadow-md group-hover:scale-110 transition-transform"></div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
+                            <h3 class="text-lg font-bold text-white">BSc (Hons) Information Technology</h3>
+                            <span class="text-sm font-bold text-blue-400 bg-blue-900/50 px-3 py-1 rounded-full">Expected 2027</span>
+                        </div>
+                        <p class="text-slate-300 font-medium mb-1">Sri Lanka Institute of Information Technology (SLIIT)</p>
+                        <p class="text-sm text-slate-400 mb-4">3rd Year, Information Systems Engineering</p>
+                        
+                        <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wide block mb-2">Key Modules</span>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs bg-slate-700 border border-slate-600 px-2 py-1 rounded text-slate-300">Data Structures & Algorithms</span>
+                                <span class="text-xs bg-slate-700 border border-slate-600 px-2 py-1 rounded text-slate-300">Object-Oriented Programming</span>
+                                <span class="text-xs bg-slate-700 border border-slate-600 px-2 py-1 rounded text-slate-300">Database Management</span>
+                                <span class="text-xs bg-slate-700 border border-slate-600 px-2 py-1 rounded text-slate-300">Web App Development</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-white py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <h4 class="text-lg font-bold">Tharushi Warakagoda</h4>
+                <p class="text-slate-500 text-sm mt-1">Aspiring Software Developer</p>
+            </div>
+            <div class="flex gap-6">
+                <a href="https://www.linkedin.com/in/tharushi-warakagoda-abb620372/" class="text-slate-400 hover:text-blue-400 transition-colors">LinkedIn</a>
+                <a href="https://github.com/tharushitharaka" class="text-slate-400 hover:text-blue-400 transition-colors">GitHub</a>
+                <a href="mailto:tharushiwarakagoda2003@gmail.com" class="text-slate-400 hover:text-blue-400 transition-colors">Email</a>
+            </div>
+        </div>
+        <div class="text-center mt-8 pt-8 border-t border-slate-900 text-slate-600 text-sm">
+            &copy; 2026 Tharushi Warakagoda. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('show');
+        });
+
+        // --- Data Store ---
+        const projectData = [
+            {
+                id: 1,
+                title: "Student Accommodation System",
+                category: "web",
+                tags: ["React", "Node.js", "MongoDB", "Stripe"],
+                description: "A full-stack web application for managing student accommodations with payment integration. Features user authentication, booking system, and admin dashboard.",
+                impact: "Developed a complete MERN stack application with secure payment processing.",
+                icon: "🏠",
+                imagePlaceholderUrl: null
+            }
+        ];
+
+        // --- Core Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProjects('all');
+        });
+
+        function renderProjects(filter) {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = ''; 
+
+            const filteredData = filter === 'all' 
+                ? projectData 
+                : projectData.filter(p => p.category === filter);
+
+            filteredData.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'glass-card rounded-xl p-6 flex flex-col h-full';
+                
+                let tagsHtml = project.tags.map(tag => 
+                    `<span class="project-tag bg-slate-700 text-slate-300 border border-slate-600">${tag}</span>`
+                ).join('');
+
+                // Image placeholder logic
+                const imageBlock = project.imagePlaceholderUrl ? `
+                    <div class="mb-4 -mx-6 -mt-6">
+                        <img src="${project.imagePlaceholderUrl}" alt="Visual mockup of ${project.title}" class="w-full h-auto rounded-t-xl object-cover border-b border-slate-700" />
+                    </div>
+                ` : '';
+
+                card.innerHTML = `
+                    ${imageBlock}
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-blue-900/50 flex items-center justify-center text-2xl shadow-inner border border-blue-800">
+                            ${project.icon}
+                        </div>
+                        <a href="https://github.com/tharushitharaka" class="text-xs font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                            GitHub ↗
+                        </a>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">${project.title}</h3>
+                    <p class="text-slate-400 text-sm mb-4 flex-grow leading-relaxed">
+                        ${project.description}
+                    </p>
+                    <div class="mb-4 bg-blue-900/30 p-3 rounded-lg border border-blue-800/50">
+                        <p class="text-xs font-bold text-blue-300 uppercase mb-1">Impact</p>
+                        <p class="text-xs text-blue-200 font-medium">${project.impact}</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        ${tagsHtml}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+    </script>
 </body>
 </html>
